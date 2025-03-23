@@ -7,6 +7,7 @@ public class User {
     String Address;
     String username;
     String password;
+    
     public void setId(int id) {
         this.id = id;
     }

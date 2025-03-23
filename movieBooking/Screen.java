@@ -19,7 +19,7 @@ public class Screen {
         this.capacity = capacity;
         this.time = time;
         this.price = price;
-        
+        available=new boolean[capacity];
     }
 
     public int getPrice() {
@@ -66,7 +66,15 @@ public class Screen {
         this.available = available;
     }
 
+    public void bookSeat(int seat)
+    {
+        this.available[seat]=true;
+    }
 
+    public void cancelSeat(int seat)
+    {
+        this.available[seat]=false;
+    }
 
     
 

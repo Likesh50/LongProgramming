@@ -10,35 +10,48 @@ public class MainClass {
     {
         Scanner sc=new Scanner(System.in);
 
-        boolean loop=true;
+        ArrayList<User> userList=new ArrayList();
+        ArrayList<Booking> bookings=new ArrayList();
         boolean isAdmin=false;
+        int user=-1;
+        int booking=1;
+
+
+
+        boolean loop=true;
+        
         int uid=1;
         int mid=1;
 
-        int user=-1;
+        
 
         String adminUsername="admin";
         String adminPassword="pass123";
 
-        ArrayList<User> userList=new ArrayList();
+        
 
         MovieBooking mb=new MovieBooking();
 
+        System.out.println("---------------------------------");
+        System.out.println("Welcome to Movie Booking Application");
+
         while(loop)
         {
-            System.out.println("---------------------------------");
-            System.out.println("Welcome to Movie Booking Application");
+            
             System.out.println("For USER Registration, type - 1");
             System.out.println("For user login, type        - 2");
             System.out.println("For Admin login, type       - 3");
             System.out.println("For adding Movie, type      - 4");
             System.out.println("For movie booking, type     - 5");
+            System.out.println("For displaying of ticket, type    - 6");
+            System.out.println("For cancelling the ticket, type   - 7");
 
             int operation=sc.nextInt();
 
             switch (operation) {
                 case 1:
                 {
+                    sc.nextLine();
                     System.out.println("Enter name");
                     String name=sc.nextLine();
 
@@ -63,6 +76,7 @@ public class MainClass {
 
                 case 2:
                 {
+                    sc.nextLine();
                     System.out.println("Enter Username");
                     String username=sc.nextLine();
 
@@ -79,11 +93,13 @@ public class MainClass {
                     {
                         System.out.println("User Login Successfull");
                     }
+                    user=userId;
                     break;
                 }
 
                 case 3:
                 {
+                    sc.nextLine();
                     System.out.println("Enter Admin Username");
                     String username=sc.nextLine();
 
@@ -104,6 +120,7 @@ public class MainClass {
 
                 case 4:
                 {
+                    sc.nextLine();
                     System.out.println("Enter Movie name");
                     String name=sc.nextLine();
 
@@ -122,6 +139,7 @@ public class MainClass {
                     System.out.println("Enter Capacity name");
                     int capacity=sc.nextInt();
 
+                    sc.nextLine();
                     System.out.println("Enter Time");
                     String time=sc.nextLine();
 
@@ -143,19 +161,28 @@ public class MainClass {
 
                     mb.displaySeats(movieId);
 
-                    System.out.println("Enter seat number to book");
+                    int cnt=-1;
+                    int seatid=0;
 
-                    int seat=sc.nextInt();
-
-                    if(mb.isAvailable(movieId,seat)==1)
+                    while(cnt!=1)
                     {
-                        System.out.println("Seat Available");
-                    }
-                    else
-                    {
-                        System.out.println("Seat not Available");
+                        System.out.println("Enter seat number to book");
+
+                        int seat=sc.nextInt();
+
+                        if(mb.isAvailable(movieId,seat)==1)
+                        {
+                            System.out.println("Seat Available");
+                            cnt=1;
+                            seatid=seat;
+                        }
+                        else
+                        {
+                            System.out.println("Seat not Available");
+                        }
                     }
 
+    
                     System.out.println("The amount is: "+mb.getSeatAmount(mid));
 
                     System.out.println("Enter 1 for cash and 2 for card");
@@ -173,9 +200,87 @@ public class MainClass {
                     else
                     {
                         System.out.println("The booking is not done. All changes are revoked");
+                        break;
                     }
 
+                    mb.bookTicket(seatid, movieId-1);
+
+                    bookings.add(new Booking(booking++, user, movieId-1, seatid));
+                    break;
                 }
+
+                case 6:
+                {
+                    if(user==-1)
+                    {
+                        System.out.println("Please login in to see the tickets booked");
+                        break;
+                    }
+
+                    int count=0;
+
+                    for(int i=0;i<bookings.size();i++)
+                    {
+                        if(user==bookings.get(i).getUserid())
+                        {
+                            System.out.println(bookings.get(i).toString());
+                            count++;
+                        }
+                    }
+                    if(count==0)
+                    {
+                        System.out.println("No tickets booked");
+                        break;
+                    }
+                    break;
+
+                }
+
+                case 7:
+                {
+
+                    if(user==-1)
+                    {
+                        System.out.println("For login to do cancellation of ticket");
+                    }
+
+                    System.out.println("The tickets you have booked");
+
+                    int count=0;
+                    for(int i=0;i<bookings.size();i++)
+                    {
+                        if(user==bookings.get(i).getUserid())
+                        {
+                            System.out.println(bookings.get(i).toString());
+                            count++;
+                        }
+                    }
+                    if(count==0)
+                    {
+                        System.out.println("No tickets booked");
+                        break;
+                    }
+                    
+                    System.out.println("Enter the booking id to cancel the ticket");
+
+                    int bid=sc.nextInt();
+                    
+                    Booking b=null;
+                    for(int i=0;i<bookings.size();i++)
+                    {
+                        if(bookings.get(i).getId()==bid)
+                        {
+                            b=bookings.get(i);
+                        }
+                    }
+                    
+
+                    mb.cancelTicket(b.getMovieid()-1,b.getSeatid());
+                    bookings.remove(b.getId());
+                    System.out.println("20% will be deduced as cancellation charge");
+                    break;
+                }
+
             
                 default:
                     break;

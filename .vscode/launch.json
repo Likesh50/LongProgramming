@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "type": "java",
+            "name": "MainClass",
+            "request": "launch",
+            "mainClass": "movieBooking.MainClass",
+            "projectName": "LongProgramming_b7c96d04"
+        },
         {
             "type": "java",
             "name": "MainClass",
@@ -14,7 +20,6 @@
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         },
-
         {
             "type": "java",
             "name": "Current File",

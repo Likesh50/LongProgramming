@@ -60,7 +60,11 @@ public class Movie {
 
         for(int i=1;i<=seats.length;i++)
         {
-            System.out.println(seats[i-1]+" ");
+            if(!seats[i-1])
+                System.out.print("1"+" ");
+
+            else
+                System.out.print("0"+" ");
             if(i%10==0)
                 System.out.println();
         }
@@ -72,10 +76,22 @@ public class Movie {
 
         boolean[] seats=sc.getAvailable();
 
-        if(seats[id])
+        if(!seats[id])
             return 1;
 
         return -1;
+    }
+
+    public void bookTicket(int seat)
+    {
+        getScreen().bookSeat(seat);
+        System.out.println("The seat booked successfully");
+    }
+
+    public void cancelTicket(int seat)
+    {
+        getScreen().cancelSeat(seat);
+        System.out.println("The seat cancelled successfully");
     }
 
     public int getAmount()

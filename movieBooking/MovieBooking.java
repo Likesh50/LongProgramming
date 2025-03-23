@@ -36,7 +36,7 @@ public class MovieBooking {
 
     public int isAvailable(int mid,int id)
     {
-        Movie m=movies.get(mid);
+        Movie m=movies.get(mid-1);
 
         if(m.seatAvailablity(id)==1)
         {
@@ -46,9 +46,19 @@ public class MovieBooking {
         return -1;
     }
 
+    public void bookTicket(int seat,int movieid)
+    {
+        movies.get(movieid).bookTicket(seat);
+    }
+
+    public void cancelTicket(int seat,int movieid)
+    {
+        movies.get(movieid).cancelTicket(seat);
+    }
+
     public int getSeatAmount(int mid)
     {
-        Movie m=movies.get(mid);
+        Movie m=movies.get(mid-1);
 
         return m.getAmount();
     }
