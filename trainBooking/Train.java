@@ -1,12 +1,15 @@
 package trainBooking;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Train {
     int id;
     boolean seats[][];
     boolean waiting[][];
     int vacant[];
+    ArrayList<int []> waitingList=new ArrayList<>();
+
     public int getId() {
         return id;
     }
@@ -94,7 +97,7 @@ public class Train {
         return "";
     }
 
-    public ArrayList<ArrayList<Integer>> bookTicket(char s,char d,int count)
+    public ArrayList<ArrayList<Integer>> bookTicket(char s,char d,int count,int pnr,boolean upward)
     {
         
         ArrayList<Integer> conformedSeats=new ArrayList<>();
@@ -122,7 +125,7 @@ public class Train {
                     {
                         seats[i][j]=true;
                     }
-                    System.out.println("Error");
+                 
                     conformedSeats.add(i);
                     cnt++;
                     if(cnt==count)
@@ -132,7 +135,7 @@ public class Train {
                 }
             }
 
-            if(cnt<=count)
+            if(cnt<count && !upward)
             {
                 for(int i=0;i<2;i++)
                 {
@@ -150,9 +153,10 @@ public class Train {
                         {
                             waiting[i][j]=true;
                         }
+                        waitingList.add(new int[]{i,s-'A',d-'A',id});
                         cnt++;
-                        waitingSeats.add(11+i);
-                        if(cnt==count-1)
+                        waitingSeats.add(i);
+                        if(cnt==count)
                         {
                             break;
                         }
@@ -160,8 +164,12 @@ public class Train {
                 }
             }
 
-            vacant[s-'A']-=count;
-            vacant[d-'A']-=count;
+            for(int i=s-'A';i<=d-'A';i++)
+            {
+                vacant[i]-=count;
+            }
+
+            
         }
         else
         {
@@ -175,11 +183,93 @@ public class Train {
         ArrayList<ArrayList<Integer>> ans=new ArrayList<>();
         ans.add(conformedSeats);
         ans.add(waitingSeats);  
-
-        System.out.println(conformedSeats);
         
         return ans;
 
+    }
+
+    public HashMap<Integer,ArrayList<Integer>> cancelTicket(char s,char d,int count,ArrayList<Integer> confirmed,ArrayList<Integer> waiting)
+    {
+        int cnt=0;
+        HashMap<Integer,ArrayList<Integer>> ret=new HashMap<>();
+
+
+            for(int con=0;con<confirmed.size();con++)
+            {
+                
+                for(int idx=s-'A';idx<=d-'A';idx++)
+                {
+                    
+                    this.seats[confirmed.get(con)][idx]=false;
+                }
+                cnt++;
+                confirmed.remove(con);
+                con--;
+                if(cnt==count)
+                {
+                    break;
+                }
+            }
+
+            if(cnt<count)
+            {
+                for(int wai=0;wai<waiting.size();wai++)
+                {
+                    for(int idx=s-'A';idx<=d-'A';idx++)
+                    {
+                        this.waiting[waiting.get(wai)][idx]=false;
+                    }
+                    cnt++;
+                    waiting.remove(wai);
+                    wai--;
+                    if(cnt==count)
+                    {
+                        break;
+                    }
+                }
+            }
+            
+            for(int i=s-'A';i<=d-'A';i++)
+            {
+                vacant[i]+=count;
+            }
+
+            
+
+            for(int i=0;i<waitingList.size();i++)
+            {
+                ArrayList<ArrayList<Integer>> ans=bookTicket((char)(65+waitingList.get(i)[1]),(char)(65+waitingList.get(i)[2]), 1, waitingList.get(i)[3], true);
+
+                ArrayList<Integer> confirm=ans.get(0);
+
+                if(confirm.size()>0)
+                {
+                    if(ret.containsKey(waitingList.get(i)[3]))
+                    {
+                        ret.get(waitingList.get(i)[3]).add(confirm.get(0));
+                    }
+                    else
+                    {
+                        ArrayList<Integer> temp=new ArrayList<>();
+                        temp.add(confirm.get(0));
+                        ret.put(waitingList.get(i)[3],temp);
+                    }
+
+                    for(int idx=waitingList.get(i)[1];idx<=waitingList.get(i)[2];idx++)
+                    {
+                        this.waiting[waitingList.get(i)[0]][idx]=false;
+                    }
+                    waitingList.remove(i);
+                    i--;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+
+        return ret;
     }
 
     

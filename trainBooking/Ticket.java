@@ -55,5 +55,13 @@ public class Ticket {
         this.waiting = waiting;
     }
 
+    @Override
+    public String toString()
+    {
+        System.out.println(confirmed);
+        System.out.println(waiting);
+        return "PNR: "+getPnr()+"\nSource: "+getSource()+"\nDestination: "+getDestination()+"\nCount: "+getCount(); 
+    }
+
     
 }
