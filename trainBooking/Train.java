@@ -103,14 +103,14 @@ public class Train {
         {
             
             int cnt=0;
-            for(int i=0;i<5;i++)
+            for(int i=0;i<8;i++)
             {
                 
                 boolean available=true;
                 for(int j=s-'A';j<=d-'A';j++)
                 {
-                    System.out.println("I am in");
-                    if(!seats[i][j])
+                    
+                    if(seats[i][j])
                     {
                         available=false;
                         break;
@@ -122,29 +122,34 @@ public class Train {
                     {
                         seats[i][j]=true;
                     }
+                    System.out.println("Error");
                     conformedSeats.add(i);
                     cnt++;
-                    if(cnt==count-1)
+                    if(cnt==count)
                     {
                         break;
                     }
                 }
             }
 
-            if(cnt<count-1)
+            if(cnt<=count)
             {
                 for(int i=0;i<2;i++)
                 {
                     boolean available=true;
                     for(int j=s-'A';j<=d-'A';j++)
                     {
-                        if(!waiting[i][j])
+                        if(waiting[i][j])
                         {
                             available=false;
                         }
                     }
                     if(available)
                     {
+                        for(int j=s-'A';j<=d-'A';j++)
+                        {
+                            waiting[i][j]=true;
+                        }
                         cnt++;
                         waitingSeats.add(11+i);
                         if(cnt==count-1)
@@ -169,9 +174,10 @@ public class Train {
 
         ArrayList<ArrayList<Integer>> ans=new ArrayList<>();
         ans.add(conformedSeats);
-        ans.add(waitingSeats);
+        ans.add(waitingSeats);  
 
-        System.out.println("I execute");
+        System.out.println(conformedSeats);
+        
         return ans;
 
     }
