@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DungeonGame",
+            "request": "launch",
+            "mainClass": "dunguonGame.DungeonGame",
+            "projectName": "LongProgramming_b7c96d04"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "trainBooking.Main",
