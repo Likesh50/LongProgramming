@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "LongProgramming_b7c96d04"
+        },
+        {
+            "type": "java",
             "name": "DungeonGame",
             "request": "launch",
             "mainClass": "dunguonGame.DungeonGame",
